@@ -10,6 +10,8 @@ const getEvents = (req, res = response) => {
 const createEvent = (req, res = response) => {
 	const { id } = req.body;
 
+	// console.log(req.body);
+
 	res.json({ //12345
 		ok: true,
 		msg: `createEvent ${id}`
