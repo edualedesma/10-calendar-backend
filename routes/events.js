@@ -30,7 +30,11 @@ router.post(
 );
 
 // Update event
-router.put('/:id', updateEvent);
+router.put(
+	'/:id', 
+	check('id', 'Id is not valid').isMongoId(),
+	updateEvent
+);
 
 // Delete event
 router.delete('/:id', deleteEvent);
