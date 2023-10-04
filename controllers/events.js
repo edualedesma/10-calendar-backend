@@ -83,14 +83,41 @@ const updateEvent = async (req, res = response) => {
 
 };
 
-const deleteEvent = (req, res = response) => {
-	const { id } = req.body;
-	console.log(id);
+const deleteEvent = async (req, res = response) => {
+	const eventId = req.params.id;
+	const uid = req.uid;
 
-	res.json({ //12345
-		ok: true,
-		msg: 'deleteEvent'
-	});
+	try {
+
+		const event = await Event.findById(eventId);
+
+		if ( !event ) {
+			res.status(500).json({
+				ok: false,
+				msg: 'The event does not exist'
+			});
+		}
+
+		if ( event.user.toString() !== uid ) {
+			return res.status(401).json({
+				ok: false,
+				msg: 'You do not have privileges in this event'
+			});
+		}
+
+		await Event.findByIdAndDelete( eventId );
+
+		res.json({
+			ok: true,
+		});
+		
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({
+			ok: false,
+			msg: 'Talk to Admin'
+		});
+	}
 };
 
 module.exports = {
